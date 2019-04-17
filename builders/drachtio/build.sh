@@ -15,16 +15,16 @@ echo "Initiating builder..."
 
 mkdir -p ${TMP_DIR}/usr/local
 apt update
-apt-get update -qq && apt-get install -y build-essential \
-		git libssl-dev libtool autoconf automake zlib1g-dev
+apt-get update -qq && \
+apt-get install -y build-essential git libssl-dev libtool libtool-bin autoconf \
+automake zlib1g-dev cmake libcurl4-openssl-dev 
 
 cd /usr/src
 git clone --depth=50 --branch=develop git://github.com/davehorton/drachtio-server.git && cd drachtio-server
 git submodule update --init --recursive
-./bootstrap.sh
 ./autogen.sh
 mkdir build && cd $_
-../configure CPPFLAGS='-DNDEBUG' CXXFLAGS='-O0' --build=aarch64-linux-gnu --host=aarch64-linux-gnu --target=aarch64-linux-gnu
+../configure CPPFLAGS='-DNDEBUG' CXXFLAGS='-O0'
 
 make
 make install exec_prefix=${TMP_DIR} prefix=${TMP_DIR}
